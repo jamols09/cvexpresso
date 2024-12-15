@@ -2,7 +2,7 @@
 	<div class="flex flex-col min-h-screen">
 		<Header
 			:links="links"
-			:register="register"
+			:redirect="redirect"
 			v-if="isDevelopment() == false"
 		/>
 		<main class="flex-grow w-full mx-auto">
@@ -29,14 +29,19 @@ const links = [
 
 const { isDevelopment } = useSiteStatus();
 
-const register = ref("Get Started");
+const redirect = ref({
+	title: "Get Started",
+	href: "/register",
+});
 
 const { isLoggedIn } = useAuth();
 
 if (isLoggedIn()) {
-	register.value = "Get Started";
+	redirect.value.title = "Get Started";
+	redirect.value.href = "/dashboard";
 } else {
-	register.value = "Sign In";
+	redirect.value.title = "Sign In";
+	redirect.value.href = "/register";
 }
 </script>
 <style scoped>

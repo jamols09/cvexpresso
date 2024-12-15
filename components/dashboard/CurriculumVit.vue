@@ -72,8 +72,8 @@ const openModal = () => {
 const closeModal = () => {
 	isModalOpen.value = false;
 };
-
 const createTemplate = () => {
+    
 	closeModal();
 };
 </script>

@@ -98,13 +98,13 @@
 							class="mt-12 -ml-1 flex w-full flex-col space-y-2 border-purple-500/10 dark:border-gray-700 sm:flex-row md:w-max lg:mt-0 lg:mr-6 lg:space-y-0 lg:border-l lg:pl-6"
 						>
 							<NuxtLink
-								to="/register"
+								:to="redirect.href"
 								class="group relative ml-auto flex h-9 w-full items-center justify-center before:absolute before:inset-0 before:rounded-full before:bg-primary before:transition-transform before:duration-300 hover:before:scale-105 active:duration-75 active:before:scale-95 dark:before:border-gray-700 dark:before:bg-primaryLight sm:px-4 lg:before:border lg:before:border-gray-200 lg:before:bg-gray-100 lg:dark:before:bg-gray-800"
 							>
 								<span
 									class="relative text-sm font-semibold group-hover:text-purple-900 text-gray-600 dark:text-gray-900 lg:text-primary lg:dark:text-white"
 								>
-									{{ register }}
+									{{ redirect.title }}
 								</span>
 							</NuxtLink>
 						</div>
@@ -172,5 +172,11 @@
 </template>
 <script setup lang="ts">
 import type { Link } from "~/types/html";
-const props = defineProps<{ links: Link[]; register: string }>();
+defineProps<{
+	links: Link[];
+	redirect: {
+		title: string;
+		href: string;
+	};
+}>();
 </script>
