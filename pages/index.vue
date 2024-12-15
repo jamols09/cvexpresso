@@ -1,19 +1,24 @@
 <template>
-	<div
-		v-for="(section, index) in sections"
-		:key="index"
-		:class="{ 'bg-[#e9b479]': index % 2 === 1 }"
-	>
-		<component :is="section.component" v-bind="section.props" />
-	</div>
+	<template v-if="isDevelopment() === false">
+		<div
+			v-for="(section, index) in sections"
+			:key="index"
+			:class="{ 'bg-[#e9b479]': index % 2 === 1 }"
+		>
+			<component :is="section.component" v-bind="section.props" />
+		</div>
+	</template>
+	<template v-else>
+		<UnderConstruction />
+	</template>
 </template>
-
 <script setup lang="ts">
 import {
 	LandingCardsFeature,
 	LandingHeadlineEmail,
 	LandingReviews,
 	LandingTrialNotice,
+	UnderConstruction,
 } from "#components";
 import {
 	headlineEmail,
@@ -22,9 +27,11 @@ import {
 	reviews,
 } from "~/seo/landingpage.json";
 
+const { isDevelopment } = useSiteStatus();
+
 // Set Meta tags
 useHead({
-	title: "CV Expresso",
+	title: `${isDevelopment() ? "Under Construction" : "CV Expresso "}`,
 	meta: [
 		{
 			name: "description",

@@ -10,6 +10,13 @@ export default defineNuxtConfig({
 		"@vueuse/nuxt",
 	],
 
+	//Run time config
+	runtimeConfig: {
+		public: {
+			siteStatus: process.env.NUXT_PUBLIC_SITE_STATUS,
+		},
+	},
+
 	// Custom TailwindCSS configuration
 	tailwindcss: {
 		config: {

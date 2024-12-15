@@ -1,10 +1,14 @@
 <template>
 	<div class="flex flex-col min-h-screen">
-		<Header :links="links" :register="register" />
+		<Header
+			:links="links"
+			:register="register"
+			v-if="isDevelopment() == false"
+		/>
 		<main class="flex-grow w-full mx-auto">
 			<slot />
 		</main>
-		<Footer />
+		<Footer v-if="isDevelopment() == false" />
 	</div>
 </template>
 
@@ -22,6 +26,8 @@ const links = [
 		href: "/about",
 	},
 ];
+
+const { isDevelopment } = useSiteStatus();
 
 const register = ref("Get Started");
 

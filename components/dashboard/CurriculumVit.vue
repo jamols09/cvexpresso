@@ -74,7 +74,6 @@ const closeModal = () => {
 };
 
 const createTemplate = () => {
-	console.log(templateName.value);
 	closeModal();
 };
 </script>
