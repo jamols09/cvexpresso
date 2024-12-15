@@ -27,15 +27,14 @@ export function generateSessionToken(): string {
  */
 export async function createSession(
 	token: string,
-	userId: string
+	userId: number
 ): Promise<Sessions> {
 	const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(token)));
 
 	const session = await prisma.sessions.create({
 		data: {
-			sessionId: sessionId,
-			usersId: userId,
-			ipAddress: "127.0.0.1", // Add a valid IP address here
+			session: sessionId,
+			userId,
 			expiresAt: new Date(Date.now() + 1000 * 60 * 60 * 24 * 14), //expires in 14 days
 			createdAt: new Date(Date.now()),
 		},
@@ -54,7 +53,7 @@ export async function validateSessionToken(
 	// const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(token)));
 	const result = await prisma.sessions.findUnique({
 		where: {
-			sessionId: token,
+			session: token,
 		},
 		include: {
 			Users: true,
@@ -66,11 +65,11 @@ export async function validateSessionToken(
 		return { session: null, user: null };
 	}
 	// Destructure the user from the result
-	const { Users, ...session } = result;
+	const { Users: user, ...session } = result;
 
 	// Check if the session has expired
 	if (Date.now() >= session.expiresAt.getTime()) {
-		await prisma.sessions.delete({ where: { sessionId: token } });
+		await prisma.sessions.delete({ where: { session: token } });
 		return { session: null, user: null };
 	}
 
@@ -86,7 +85,7 @@ export async function validateSessionToken(
 			},
 		});
 	}
-	return { session, user: Users };
+	return { session, user };
 }
 
 /**
@@ -95,9 +94,9 @@ export async function validateSessionToken(
  * @returns {Promise<void>}
  */
 export async function invalidateSession(sessionId: string): Promise<void> {
-	await prisma.sessions.delete({ where: { sessionId: sessionId } });
+	await prisma.sessions.delete({ where: { session: sessionId } });
 }
 
 export type SessionValidationResult =
-	| { session: Sessions; user: Users | null }
+	| { session: Sessions; user: Users }
 	| { session: null; user: null };

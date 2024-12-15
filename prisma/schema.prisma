@@ -1,34 +1,33 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
     provider = "prisma-client-js"
 }
 
 datasource db {
-    provider = "mongodb"
-    url      = env("DATABASE_URL_MONGODB")
-}
-
-model Users {
-    id         String    @id @default(auto()) @map("_id") @db.ObjectId
-    email      String    @unique
-    password   String
-    username   String?   @unique
-    firstname  String?
-    middlename String?
-    lastname   String?
-    createdAt  DateTime  @default(now())
-    updatedAt  DateTime  @updatedAt
-    session    Sessions[]
+    provider = "mysql"
+    url      = env("DATABASE_URL_MYSQL")
 }
 
 model Sessions {
-    id        String   @id @default(auto()) @map("_id") @db.ObjectId
-    sessionId String   @unique
-    ipAddress String
+    id        Int      @id @default(autoincrement())
+    userId    Int
+    session   String   @unique(map: "Sessions_session_key")
     expiresAt DateTime
     createdAt DateTime @default(now())
-    Users     Users?   @relation(fields: [usersId], references: [id])
-    usersId   String?  @db.ObjectId
+    Users     Users    @relation(fields: [userId], references: [id], onDelete: Cascade, map: "Sessions_userId_fkey")
+
+    @@index([userId], map: "Sessions_userId_fkey")
+}
+
+model Users {
+    id         Int        @id @default(autoincrement())
+    email      String     @unique(map: "Users_email_key")
+    password   String
+    username   String?    @unique(map: "Users_username_key")
+    firstname  String?
+    middlename String?
+    lastname   String?
+    createdAt DateTime   @default(now())
+    updatedAt DateTime?
+    sessions   Sessions[]
+    isVerified Boolean    @default(false)
 }
