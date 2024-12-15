@@ -1,0 +1,15 @@
+@font-face {
+	font-family: "Urbanist Italic";
+	src: url("/fonts/Urbanist-Italic-VariableFont_wght.ttf") format("ttf");
+	font-weight: normal;
+	font-style: normal;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: "Urbanist";
+	src: url("/fonts/Urbanist-VariableFont_wght.ttf") format("ttf");
+	font-weight: normal;
+	font-style: normal;
+	font-display: swap;
+}

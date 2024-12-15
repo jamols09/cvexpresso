@@ -1,0 +1,41 @@
+{
+	"headlineEmail": {
+		"title1": "Create, Improve,",
+		"title2": "Submit",
+		"subtitle": "Whether you're starting from scratch or looking to refine your existing resume, our AI ensures that your resume highlights your strengths and achievements, making you the ideal candidate for your dream job.",
+		"image": "/images/lets-start.svg",
+		"button": "Get Started",
+		"placeholder": "Your mail address"
+	},
+	"cardsFeature": {
+		"title": "A technology-first approach",
+		"subtitle": "From selecting free CV templates to generating personalized application letters and sharing your resume via a link, we provide the right tools to help you stand out and succeed in your career journey.",
+		"cards": [
+			{
+				"image": "https://cdn-icons-png.flaticon.com/512/584/584796.png",
+				"title": "Select Free CV Templates",
+				"description": "Choose from a variety of free CV templates to create a professional resume. Our templates are designed to highlight your skills and experience, making it easy to create a standout CV."
+			},
+			{
+				"image": "https://cdn-icons-png.flaticon.com/512/584/584796.png",
+				"title": "Generate Application Letters",
+				"description": "Use our AI-powered tool to generate personalized application letters. Simply input your details and let our AI create a professional application letter tailored to your job application."
+			},
+			{
+				"image": "https://cdn-icons-png.flaticon.com/512/584/584796.png",
+				"title": "Share Your CV or Resume",
+				"description": "Easily share your CV or resume via a link. You can also send your generated CV or application letter through email, making it convenient to apply for jobs and share your professional documents."
+			}
+		]
+	},
+	"trialNotice": {
+		"title": "Free for 3 days",
+		"subtitle": "Our free trial gives you full access to our templates, and sharing features, so you can create a standout CV and apply for your dream job with confidence.",
+		"button": "Start Free Trial"
+	},
+	"reviews": {
+		"title": "CV Expresso Reviews",
+		"subtitle1": "Rated <span itemprop=\"ratingValue\">4.9</span> out of <span itemprop=\"bestRating\">5</span> • Excellent",
+		"subtitle2": "Based on <span itemprop=\"ratingCount\">186</span> <a target=\"_blank\" rel=\"noopener noreferrer\" aria-label=\"Reviews\" href=\"https://uk.trustpilot.com/review/cvtemplate.co.uk\" class=\"text-coffee-900 font-bold\">Trustpilot</a> reviews"
+	}
+}
