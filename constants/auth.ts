@@ -4,3 +4,4 @@ export const PASSWORD_LENGTH = "Password must be between 8 and 72 characters";
 export const USERNAME_EXISTS = "Username already exists";
 export const SESSION_MISSING = "Session token is missing";
 export const USER_NOT_FOUND = "User not found";
+export const NAME_EMAIL_REQUIRED = "Name and email are required";

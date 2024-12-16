@@ -1,14 +1,12 @@
-import type { Form, ApiResponse } from "~/types/auth";
-import { ref } from "vue";
-import { validateSessionToken } from "~/utils/auth/session";
+import type { Form } from "~/types/auth";
 
 export function useAuth() {
-	const user = ref<Form | null>(null);
-	const sessionToken = useCookie("session");
+
+	const user = useState<Form | null>("user", () => null);
 	const sessionHeader = useRequestHeaders(["session"]);
 
 	const isLoggedIn = () => {
-		return sessionToken.value !== null;
+		return sessionHeader !== null;
 	};
 
 	/**
