@@ -50,7 +50,10 @@ export async function createSession(
 export async function validateSessionToken(
 	token: string
 ): Promise<SessionValidationResult> {
-	// const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(token)));
+	if (!token) {
+		return { session: null, user: null };
+	}
+
 	const result = await prisma.sessions.findUnique({
 		where: {
 			session: token,

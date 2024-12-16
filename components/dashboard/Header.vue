@@ -12,11 +12,7 @@
 						class="relative z-20 flex w-full justify-between md:px-0 lg:w-max"
 					>
 						<!-- LOGO -->
-						<NuxtLink
-							href="/"
-							aria-label="logo"
-							class="flex items-center space-x-2"
-						>
+						<a href="/" aria-label="logo" class="flex items-center space-x-2">
 							<svg
 								class="h-7 w-auto"
 								viewBox="0 0 1206 270"
@@ -53,7 +49,7 @@
 									</clipPath>
 								</defs>
 							</svg>
-						</NuxtLink>
+						</a>
 
 						<button
 							aria-label="humburger"
@@ -86,9 +82,9 @@
 								<li>
 									<a
 										href="/"
-										class="block transition transform hover:scale-105 hover:text-purple-900 dark:hover:text-white md:px-4"
+										class="block transition transform dark:hover:text-white md:px-4"
 									>
-										<span> asdasdasd </span>
+										<span> Home </span>
 									</a>
 								</li>
 							</ul>
@@ -97,16 +93,16 @@
 						<div
 							class="mt-12 -ml-1 flex w-full flex-col space-y-2 border-purple-500/10 dark:border-gray-700 sm:flex-row md:w-max lg:mt-0 lg:mr-6 lg:space-y-0 lg:border-l lg:pl-6"
 						>
-							<NuxtLink
-								to="/register"
-								class="group relative ml-auto flex h-9 w-full items-center justify-center before:absolute before:inset-0 before:rounded-full before:bg-primary before:transition-transform before:duration-300 hover:before:scale-105 active:duration-75 active:before:scale-95 dark:before:border-gray-700 dark:before:bg-primaryLight sm:px-4 lg:before:border lg:before:border-gray-200 lg:before:bg-gray-100 lg:dark:before:bg-gray-800"
+							<div
+								class="group relative ml-auto flex h-9 w-full items-center justify-center before:absolute before:inset-0 before:rounded-full before:bg-primary dark:before:border-gray-700 dark:before:bg-primaryLight sm:px-4 lg:before:border lg:before:border-gray-200 lg:before:bg-gray-100 lg:dark:before:bg-gray-800"
 							>
 								<span
+									v-if="user"
 									class="relative text-sm font-semibold group-hover:text-purple-900 text-gray-600 dark:text-gray-900 lg:text-primary lg:dark:text-white"
 								>
-									Hello
+									Hello {{ user.firstname }} {{ user.lastname }}
 								</span>
-							</NuxtLink>
+							</div>
 						</div>
 						<button
 							aria-label="switch theme"
@@ -141,4 +137,8 @@
 		</nav>
 	</header>
 </template>
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+defineProps<{
+	user: any;
+}>();
+</script>
