@@ -1,13 +1,34 @@
-import type { Form } from "~/types/auth";
+import type { Form, ApiResponse } from "~/types/auth";
 import { ref } from "vue";
+import { validateSessionToken } from "~/utils/auth/session";
 
 export function useAuth() {
 	const user = ref<Form | null>(null);
 	const sessionToken = useCookie("session");
+	const sessionHeader = useRequestHeaders(["session"]);
 
-	// Check if the user is logged in
 	const isLoggedIn = () => {
 		return sessionToken.value !== null;
+	};
+
+	/**
+	 * Fetches the current authenticated user's information.
+	 *
+	 * @returns {Promise<void>} The response from the user API.
+	 */
+	const getCurrentUser = async (): Promise<void> => {
+		try {
+			const data = await $fetch("/api/auth/user", {
+				method: "GET",
+				headers: sessionHeader,
+			});
+
+			if (data.body && "user" in data.body) {
+				user.value = data.body.user;
+			}
+		} catch (err) {
+			console.log(err);
+		}
 	};
 
 	/**
@@ -64,6 +85,7 @@ export function useAuth() {
 
 	return {
 		user,
+		getCurrentUser,
 		isLoggedIn,
 		register,
 		update,
