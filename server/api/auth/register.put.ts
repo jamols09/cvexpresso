@@ -7,34 +7,38 @@ const prisma = new PrismaClient();
 
 export default defineEventHandler(async (event) => {
 	const body = await readBody(event);
+	const { username, firstname, lastname, middlename } = body;
 
 	// Check existing username
 	const isExistingUsername = await prisma.users.findFirst({
-		where: { username: body.username },
+		where: { username },
 	});
 
 	if (isExistingUsername) {
-		return {
+		throw createError({
 			status: HTTP_STATUS.BAD_REQUEST,
-			body: { error: USERNAME_EXISTS },
-		};
+			statusMessage: USERNAME_EXISTS,
+		});
 	}
 
 	// Retrieve and validate the session token
 	const sessionToken = getCookie(event, "session");
-	if (!sessionToken) {
-		return {
-			status: HTTP_STATUS.UNAUTHORIZED,
-			body: { error: SESSION_MISSING },
-		};
-	}
 
-	const { user, session } = await validateSessionToken(sessionToken);
-	if (!user || !session) {
-		return {
+	if (!sessionToken) {
+		throw createError({
 			status: HTTP_STATUS.UNAUTHORIZED,
-			body: { error: SESSION_MISSING },
-		};
+			statusMessage: SESSION_MISSING,
+		});
+	}
+    
+    // validate the session token
+	const { user, session } = await validateSessionToken(sessionToken);
+
+	if (!user || !session) {
+		throw createError({
+			status: HTTP_STATUS.UNAUTHORIZED,
+			statusMessage: SESSION_MISSING,
+		});
 	}
 
 	// Set the session as a cookie
@@ -49,10 +53,10 @@ export default defineEventHandler(async (event) => {
 	const updatedUser = await prisma.users.update({
 		where: { email: user.email },
 		data: {
-			username: body.username,
-			firstname: body.firstname,
-			lastname: body.lastname,
-            middlename: body.middlename,
+			username,
+			firstname,
+			lastname,
+			middlename,
 		},
 	});
 

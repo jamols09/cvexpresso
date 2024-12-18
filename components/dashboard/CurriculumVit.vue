@@ -22,11 +22,21 @@
 		<div
 			class="flex flex-wrap justify-center sm:justify-start gap-16 mt-4 mx-12 overflow-y-auto h-[28rem]"
 		>
-			<Cards />
+			<ClientOnly>
+				<Cards
+					v-for="template in templates"
+					:key="template.id"
+					:name="template.name"
+					@delete="openConfirmDeleteModal(template.id)"
+					@edit="handleEditTemplate(template.id)"
+					@preview="handlePreviewTemplate(template.id)"
+					@statistics="handleStatisticsTemplate(template.id)"
+				/>
+			</ClientOnly>
 		</div>
 		<Modal :isOpen="isModalOpen" @close="closeModal">
 			<h2 class="text-2xl font-bold mb-4">Create New CV</h2>
-			<form @submit.prevent="createTemplate">
+			<form @submit.prevent="handleCreateTemplateUser">
 				<div class="mb-4">
 					<label
 						for="templateName"
@@ -37,7 +47,7 @@
 					<input
 						type="text"
 						id="templateName"
-						v-model="template"
+						v-model="name"
 						class="tracking-wide mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-coffee-500 focus:border-coffee-500 sm:text-lg"
 						required
 					/>
@@ -52,6 +62,24 @@
 				</div>
 			</form>
 		</Modal>
+		<Modal :isOpen="isConfirmDeleteModalOpen" @close="closeConfirmDeleteModal">
+			<h2 class="text-2xl font-bold mb-4">Confirm Delete</h2>
+			<p class="mb-4">Are you sure you want to delete this template?</p>
+			<div class="flex justify-end gap-4">
+				<button
+					@click="handleConfirmDelete"
+					class="bg-red-400 text-white px-4 py-2 rounded-lg hover:bg-red-500 transition duration-300"
+				>
+					Yes
+				</button>
+				<button
+					@click="closeConfirmDeleteModal"
+					class="bg-coffee-700 text-white px-4 py-2 rounded-lg hover:bg-coffee-900 transition duration-300"
+				>
+					No
+				</button>
+			</div>
+		</Modal>
 	</div>
 </template>
 
@@ -59,31 +87,77 @@
 import { ref } from "vue";
 import Cards from "./Cards.vue";
 import Modal from "./Modal.vue";
+import type { Template } from "~/types/html";
 
 defineProps({
 	title: String,
 });
 
-const { createTemplateUser } = useTemplate();
+const { createUserTemplate, getUserTemplate, delUserTemplate } = useTemplate();
+
+const templateIdToDelete = ref<number | null>(null);
+const isConfirmDeleteModalOpen = ref(false);
 const isModalOpen = ref(false);
-const template = ref("");
+const templates = ref<Template[]>([]);
+const name = ref("");
 
 const openModal = () => {
 	isModalOpen.value = true;
 };
+
 const closeModal = () => {
 	isModalOpen.value = false;
 };
 
-const createTemplate = async () => {
+const openConfirmDeleteModal = (id: number) => {
+	templateIdToDelete.value = id;
+	isConfirmDeleteModalOpen.value = true;
+};
+
+const closeConfirmDeleteModal = () => {
+	isConfirmDeleteModalOpen.value = false;
+	templateIdToDelete.value = null;
+};
+
+const handleUserTemplates = async () => {
+	templates.value = await getUserTemplate();
+};
+
+const handleCreateTemplateUser = async () => {
 	const { user } = useAuth();
-	await createTemplateUser({
-		name: template.value,
+	await createUserTemplate({
+		name: name.value,
 		email: user.value?.email,
 	});
-
+	await handleUserTemplates();
 	closeModal();
 };
+
+const handleConfirmDelete = async () => {
+	if (templateIdToDelete.value !== null) {
+		try {
+			await delUserTemplate(templateIdToDelete.value);
+			await handleUserTemplates();
+            closeConfirmDeleteModal();
+		} catch (error) {
+			console.error(error);
+		}
+	}
+};
+
+const handleEditTemplate = (id: number) => {
+	console.log("Edit Template", id);
+};
+
+const handlePreviewTemplate = (id: number) => {
+	console.log("Preview Template", id);
+};
+
+const handleStatisticsTemplate = (id: number) => {
+	console.log("Statistics Template", id);
+};
+
+await handleUserTemplates();
 </script>
 
 <style scoped>

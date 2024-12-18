@@ -26,11 +26,12 @@ export default defineEventHandler(async (event) => {
 	const isExistingEmail = await prisma.users.findFirst({
 		where: { email: body.email },
 	});
+
 	if (isExistingEmail) {
-		return {
+		throw createError({
 			status: HTTP_STATUS.BAD_REQUEST,
-			body: { error: EMAIL_EXISTS },
-		};
+			statusMessage: EMAIL_EXISTS,
+		});
 	}
 
 	// Create a new user

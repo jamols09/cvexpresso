@@ -3,7 +3,20 @@ import { USER_NOT_FOUND } from "~/constants/auth";
 import { HTTP_STATUS } from "~/constants/http";
 import { validateSessionToken } from "~/utils/auth/session";
 
+const prisma = new PrismaClient();
+
 export default defineEventHandler(async (event) => {
+	const idParam = getRouterParam(event, "id");
+
+	// Sanitize and validate the id parameter
+	const id = Number(idParam);
+	if (isNaN(id)) {
+		throw createError({
+			status: HTTP_STATUS.BAD_REQUEST,
+			statusMessage: "Invalid id provided",
+		});
+	}
+
 	const cookies = parseCookies(event);
 	const { user } = await validateSessionToken(cookies.session);
 
@@ -14,17 +27,15 @@ export default defineEventHandler(async (event) => {
 		});
 	}
 
-	const {
-		password,
-		id,
-		createdAt,
-		updatedAt,
-		isVerified,
-		...userWithoutSensitiveInfo
-	} = user;
+	// Get all templates for the user
+	await prisma.templates_Users.delete({
+		where: { id },
+	});
 
 	return {
 		status: HTTP_STATUS.OK,
-		body: { user: userWithoutSensitiveInfo },
+		body: {
+			hello: "world",
+		},
 	};
 });

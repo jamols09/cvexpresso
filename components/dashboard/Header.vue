@@ -138,7 +138,5 @@
 	</header>
 </template>
 <script lang="ts" setup>
-defineProps<{
-	user: any;
-}>();
+const { user } = useAuth();
 </script>

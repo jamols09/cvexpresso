@@ -15,6 +15,7 @@
 					:tooltiptext="button.tooltiptext"
 					:image="button.image"
 					:buttontext="button.buttontext"
+					@click="handleButtonClick"
 				/>
 			</div>
 		</div>
@@ -22,13 +23,26 @@
 		<div
 			class="absolute bottom-0 left-0 right-0 bg-gray-800 text-white text-center py-2"
 		>
-			Template Name
+			{{ truncatedName }}
 		</div>
 	</div>
 </template>
 
 <script lang="ts" setup>
 import CircleButton from "./CircleButton.vue";
+
+const props = defineProps({
+	name: String,
+});
+
+const emit = defineEmits(["delete", "edit", "statistics", "preview"]);
+
+const truncatedName = computed(() => {
+	if (props.name)
+		return props?.name.length > 20
+			? props?.name.slice(0, 20) + "..."
+			: props.name;
+});
 
 const buttonConfig = [
 	{
@@ -52,6 +66,21 @@ const buttonConfig = [
 		buttontext: "Delete",
 	},
 ];
+
+const handleButtonClick = (buttontext: string) => {
+	if (buttontext === "Delete") {
+		emit("delete");
+	}
+	if (buttontext === "Edit") {
+		emit("edit");
+	}
+	if (buttontext === "Statistics") {
+		emit("statistics");
+	}
+	if (buttontext === "Preview") {
+		emit("preview");
+	}
+};
 </script>
 
 <style scoped></style>

@@ -1,6 +1,6 @@
 <template>
 	<!-- Introduction -->
-	<DashboardBody />
+	<DashboardContents />
 </template>
 <script lang="ts" setup>
 // Set Meta tags

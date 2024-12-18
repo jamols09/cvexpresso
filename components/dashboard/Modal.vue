@@ -14,7 +14,7 @@
 			>
 				<img
 					src="/images/Close-Circle-Streamline-Solar.svg"
-                    class="text-red-500"
+					class="text-red-500"
 					alt="Close"
 					width="30"
 					height="30"
@@ -56,4 +56,12 @@ if (modal.value) {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+.modal-enter-active,
+.modal-leave-active {
+	transition: opacity 0.3s ease;
+}
+.modal-enter, .modal-leave-to /* .modal-leave-active in <2.1.8 */ {
+	opacity: 0;
+}
+</style>

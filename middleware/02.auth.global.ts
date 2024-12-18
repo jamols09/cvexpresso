@@ -12,6 +12,7 @@ export default defineNuxtRouteMiddleware((to, from) => {
 	if (!isLoggedIn() && !excemptedRoutes.includes(to.path)) {
 		return navigateTo("/login");
 	}
+    
 	// When user is logged in and the route is excempted, redirect to home
 	// if (isLoggedIn() && excemptedRoutes.includes(to.path)) {
 	// 	return navigateTo("/");

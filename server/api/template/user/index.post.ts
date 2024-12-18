@@ -1,38 +1,29 @@
 import { Prisma, PrismaClient } from "@prisma/client";
-import { NAME_EMAIL_REQUIRED, USER_NOT_FOUND } from "~/constants/auth";
+import { NAME_REQUIRED, USER_NOT_FOUND } from "~/constants/auth";
 import { HTTP_STATUS } from "~/constants/http";
+import { validateSessionToken } from "~/utils/auth/session";
 
 const prisma = new PrismaClient();
 
 export default defineEventHandler(async (event) => {
 	const body = await readBody(event);
-    console.log("BODY", body);
-    console.log("NAME", body.name);
+	const { name } = body;
+	const cookies = parseCookies(event); // get cookie of the user
+	const { user } = await validateSessionToken(cookies.session); // decode the cookie of client to identify the user
 
-	if(!body.name || !body.email) {
-		return {
+	if (!body.name) {
+		throw createError({
 			status: HTTP_STATUS.BAD_REQUEST,
-			body: {
-				error: NAME_EMAIL_REQUIRED,
-			},
-		};
+			statusMessage: NAME_REQUIRED,
+		});
 	}
-
-	// Find the user by email
-	const user = await prisma.users.findUnique({
-		where: {
-			email: body.email,
-		},
-	});
 
 	// If the user is not found, return 404
 	if (!user) {
-		return {
+		throw createError({
 			status: HTTP_STATUS.NOT_FOUND,
-			body: {
-				error: USER_NOT_FOUND,
-			},
-		};
+			statusMessage: USER_NOT_FOUND,
+		});
 	}
 
 	// Create a new template from user
@@ -42,7 +33,7 @@ export default defineEventHandler(async (event) => {
 			templateId: null,
 			content: Prisma.JsonNull,
 			createdAt: new Date(),
-			name: body.name,
+			name,
 		},
 	});
 

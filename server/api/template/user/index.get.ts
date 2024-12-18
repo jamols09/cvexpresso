@@ -3,6 +3,8 @@ import { USER_NOT_FOUND } from "~/constants/auth";
 import { HTTP_STATUS } from "~/constants/http";
 import { validateSessionToken } from "~/utils/auth/session";
 
+const prisma = new PrismaClient();
+
 export default defineEventHandler(async (event) => {
 	const cookies = parseCookies(event);
 	const { user } = await validateSessionToken(cookies.session);
@@ -14,17 +16,19 @@ export default defineEventHandler(async (event) => {
 		});
 	}
 
-	const {
-		password,
-		id,
-		createdAt,
-		updatedAt,
-		isVerified,
-		...userWithoutSensitiveInfo
-	} = user;
+	// Get all templates for the user
+	const templates = await prisma.templates_Users.findMany({
+		where: { userId: user.id },
+	});
 
 	return {
 		status: HTTP_STATUS.OK,
-		body: { user: userWithoutSensitiveInfo },
+		body: {
+			templates: templates.map((template) => ({
+				id: template.id,
+				templateId: template.templateId,
+				name: template.name,
+			})),
+		},
 	};
 });
