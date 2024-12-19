@@ -1,0 +1,60 @@
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "mysql"
+    url      = env("DATABASE_URL_MYSQL")
+}
+
+model Sessions {
+    id        Int      @id @default(autoincrement())
+    userId    Int
+    session   String   @unique(map: "Sessions_session_key")
+    expiresAt DateTime
+    createdAt DateTime @default(now())
+    Users     Users    @relation(fields: [userId], references: [id], onDelete: Cascade, map: "Sessions_userId_fkey")
+
+    @@index([userId], map: "Sessions_userId_fkey")
+}
+
+model Templates {
+    id        Int       @id @default(autoincrement())
+    name      String    @unique(map: "Templates_name_key")
+    content   Json
+    createdAt DateTime  @default(now())
+    updatedAt DateTime?
+
+    TemplatesUsers Templates_Users[] @relation(map: "TemplatesUsers_templateId_fkey")
+}
+
+model Templates_Users {
+    id         Int        @id @default(autoincrement())
+    userId     Int
+    templateId Int?
+    content    Json?
+    createdAt  DateTime   @default(now())
+    updatedAt  DateTime?
+    Users      Users      @relation(fields: [userId], references: [id], onDelete: Cascade, map: "TemplatesUsers_userId_fkey")
+    Templates  Templates? @relation(fields: [templateId], references: [id], onDelete: Cascade, map: "TemplatesUsers_templateId_fkey")
+    name       String?
+
+    @@index([userId], map: "TemplatesUsers_userId_fkey")
+    @@index([templateId], map: "TemplatesUsers_templateId_fkey")
+}
+
+model Users {
+    id         Int        @id @default(autoincrement())
+    email      String     @unique(map: "Users_email_key")
+    password   String
+    username   String?    @unique(map: "Users_username_key")
+    firstname  String?
+    middlename String?
+    lastname   String?
+    createdAt  DateTime   @default(now())
+    updatedAt  DateTime?
+    sessions   Sessions[]
+    isVerified Boolean    @default(false)
+
+    TemplatesUsers Templates_Users[] @relation(map: "TemplatesUsers_userId_fkey")
+}
