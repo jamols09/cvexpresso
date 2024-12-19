@@ -1,5 +1,5 @@
 export function useTemplate() {
-    // We initialize this variable since we retrieve the data during server-side rendering
+	// We initialize this variable since we retrieve the data during server-side rendering
 	const requestFetch = useRequestFetch();
 
 	/**
@@ -29,7 +29,7 @@ export function useTemplate() {
 	const getUserTemplate = async (): Promise<any> => {
 		try {
 			const { data } = await useAsyncData(() =>
-				requestFetch("/api/template/user", { method: "GET" })
+				requestFetch<any>("/api/template/user", { method: "GET" })
 			);
 
 			return data.value?.templates;
