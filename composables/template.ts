@@ -32,7 +32,7 @@ export function useTemplate() {
 				requestFetch("/api/template/user", { method: "GET" })
 			);
 
-			return data.value?.body?.templates;
+			return data.value?.templates;
 		} catch (err) {
 			console.log(err);
 		}

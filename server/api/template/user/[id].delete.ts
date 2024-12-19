@@ -33,9 +33,6 @@ export default defineEventHandler(async (event) => {
 	});
 
 	return {
-		status: HTTP_STATUS.OK,
-		body: {
-			hello: "world",
-		},
+		message: `Template has been deleted`,
 	};
 });

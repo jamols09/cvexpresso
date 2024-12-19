@@ -22,13 +22,10 @@ export default defineEventHandler(async (event) => {
 	});
 
 	return {
-		status: HTTP_STATUS.OK,
-		body: {
-			templates: templates.map((template) => ({
-				id: template.id,
-				templateId: template.templateId,
-				name: template.name,
-			})),
-		},
+		templates: templates.map((template) => ({
+			id: template.id,
+			templateId: template.templateId,
+			name: template.name,
+		})),
 	};
 });

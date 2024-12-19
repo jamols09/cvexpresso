@@ -2,6 +2,7 @@ import { Prisma, PrismaClient } from "@prisma/client";
 import { NAME_REQUIRED, USER_NOT_FOUND } from "~/constants/auth";
 import { HTTP_STATUS } from "~/constants/http";
 import { validateSessionToken } from "~/utils/auth/session";
+import { capitalizeFirstLetter } from "~/utils/helper";
 
 const prisma = new PrismaClient();
 
@@ -33,12 +34,11 @@ export default defineEventHandler(async (event) => {
 			templateId: null,
 			content: Prisma.JsonNull,
 			createdAt: new Date(),
-			name,
+			name: capitalizeFirstLetter(name),
 		},
 	});
 
 	return {
-		status: HTTP_STATUS.OK,
-		body: { user: templateUsers },
+		message: `Template ${templateUsers.name} has been created`,
 	};
 });
