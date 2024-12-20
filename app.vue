@@ -10,6 +10,10 @@ const layout = computed(() => {
 		return "dashboard";
 	}
 
+    if(route.path.startsWith("/template")) {
+        return "template";
+    }
+
 	return "default";
 });
 </script>

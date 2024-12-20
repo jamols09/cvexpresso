@@ -37,7 +37,7 @@ const redirect = ref({
 const { isLoggedIn } = useAuth();
 
 if (isLoggedIn()) {
-	redirect.value.title = "Get Started";
+	redirect.value.title = "Dashboard";
 	redirect.value.href = "/dashboard";
 } else {
 	redirect.value.title = "Sign In";

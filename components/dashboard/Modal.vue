@@ -3,14 +3,11 @@
 		v-if="isOpen"
 		class="fixed inset-0 z-50 flex items-center justify-center bg-coffee-900 bg-opacity-50"
 	>
-		<div
-			ref="modal"
-			class="bg-white shadow-lg w-11/12 md:w-1/2 lg:w-1/6 p-6 fixed"
-			:style="styleModal"
-		>
-			<button
+		<div ref="modal" :class="computedModalClass" :style="styleModal">
+			<!-- <button
 				@click="closeModal"
 				class="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
+				v-if="enableCloseBtn"
 			>
 				<img
 					src="/images/Close-Circle-Streamline-Solar.svg"
@@ -19,8 +16,7 @@
 					width="30"
 					height="30"
 				/>
-			</button>
-			{{ styleModal }}
+			</button> -->
 			<slot></slot>
 		</div>
 	</div>
@@ -28,22 +24,29 @@
 
 <script lang="ts" setup>
 import { ref } from "vue";
-import { useDraggable } from "@vueuse/core";
+import { useDraggable, onClickOutside } from "@vueuse/core";
 
-defineProps({
+const props = defineProps({
 	isOpen: {
 		type: Boolean,
 		required: true,
 	},
+	modalclass: {
+		type: String,
+		required: false,
+	},
+	enableCloseBtn: {
+		type: Boolean,
+		default: true,
+		required: false,
+	},
 });
-
-const emits = defineEmits(["close"]);
-const closeModal = () => {
-	emits("close");
-};
 
 const modal = ref<HTMLElement | null>(null);
 const styleModal = ref();
+const defaultImageClass = "bg-white dark:bg-gray-800 p-4 shadow-lg";
+
+const emits = defineEmits(["close"]);
 
 if (modal.value) {
 	const { style } = useDraggable(modal, {
@@ -54,6 +57,21 @@ if (modal.value) {
 	});
 	styleModal.value = style.value;
 }
+
+const computedModalClass = computed(() => {
+	return props.modalclass ? props.modalclass : defaultImageClass;
+});
+
+const closeModal = () => {
+	emits("close");
+};
+
+onMounted(() => {
+	onClickOutside(modal, () => {
+		console.log(modal.value);
+		closeModal();
+	});
+});
 </script>
 
 <style scoped>
