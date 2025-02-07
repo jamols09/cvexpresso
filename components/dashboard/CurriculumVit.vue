@@ -36,7 +36,7 @@
 		</div>
 		<Modal :isOpen="isModalOpen" @close="closeModal">
 			<h2 class="text-2xl font-bold mb-4">Create New CV</h2>
-			<form @submit.prevent="handleCreateTemplateUser">
+			<form @submit.prevent="handleCreateTemplateUser" class="w-auto sm:w-96">
 				<div class="mb-4">
 					<label
 						for="templateName"
@@ -55,7 +55,7 @@
 				<div class="flex justify-end">
 					<button
 						type="submit"
-						class="bg-coffee-700 text-white px-4 py-2 rounded-lg hover:bg-coffee-600 transition duration-300"
+						class="bg-coffee-700 text-white px-4 py-2 hover:bg-coffee-600 transition duration-300"
 					>
 						Create
 					</button>
@@ -68,13 +68,13 @@
 			<div class="flex justify-end gap-4">
 				<button
 					@click="handleConfirmDelete"
-					class="bg-red-400 text-white px-4 py-2 rounded-lg hover:bg-red-500 transition duration-300"
+					class="bg-red-400 text-white px-4 py-2 hover:bg-red-500 transition duration-300"
 				>
 					Yes
 				</button>
 				<button
 					@click="closeConfirmDeleteModal"
-					class="bg-coffee-700 text-white px-4 py-2 rounded-lg hover:bg-coffee-900 transition duration-300"
+					class="bg-coffee-700 text-white px-4 py-2 hover:bg-coffee-900 transition duration-300"
 				>
 					No
 				</button>
@@ -138,7 +138,7 @@ const handleConfirmDelete = async () => {
 		try {
 			await delUserTemplate(templateIdToDelete.value);
 			await handleUserTemplates();
-            closeConfirmDeleteModal();
+			closeConfirmDeleteModal();
 		} catch (error) {
 			console.error(error);
 		}
@@ -147,6 +147,7 @@ const handleConfirmDelete = async () => {
 
 const handleEditTemplate = (id: number) => {
 	console.log("Edit Template", id);
+	navigateTo(`/template/1`);
 };
 
 const handlePreviewTemplate = (id: number) => {

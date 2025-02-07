@@ -21,11 +21,14 @@ export default defineEventHandler(async (event) => {
 		where: { userId: user.id },
 	});
 
+	// Return the templates
+	const result = templates.map((template) => ({
+		id: template.id,
+		templateId: template.templateId,
+		name: template.name,
+	}));
+
 	return {
-		templates: templates.map((template) => ({
-			id: template.id,
-			templateId: template.templateId,
-			name: template.name,
-		})),
+		templates: result,
 	};
 });
